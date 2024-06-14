@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Visitor {
+  chatRooms ChatRoom[]
+  createdAt DateTime   @default(now())
+  id        String     @id @default(cuid())
+  name      String?
+  updatedAt DateTime   @updatedAt
+}
+
+model Admin {
+  chatRooms ChatRoom[]
+  createdAt DateTime   @default(now())
+  email     String?
+  id        String     @id @default(cuid())
+  password  String?
+  updatedAt DateTime   @updatedAt
+}
+
+model Message {
+  chatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String?
+  content    String?
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  updatedAt  DateTime  @updatedAt
+}
+
+model ChatRoom {
+  admin     Admin?    @relation(fields: [adminId], references: [id])
+  adminId   String?
+  createdAt DateTime  @default(now())
+  id        String    @id @default(cuid())
+  messages  Message[]
+  updatedAt DateTime  @updatedAt
+  visitor   Visitor?  @relation(fields: [visitorId], references: [id])
+  visitorId String?
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
