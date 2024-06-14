@@ -1,0 +1,6 @@
+import { ChatRoomWhereUniqueInput } from "../chatRoom/ChatRoomWhereUniqueInput";
+
+export type MessageCreateInput = {
+  chatRoom?: ChatRoomWhereUniqueInput | null;
+  content?: string | null;
+};
